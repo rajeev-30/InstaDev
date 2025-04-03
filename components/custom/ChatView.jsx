@@ -31,7 +31,7 @@ const ChatView = () => {
         if (messages?.length > 0) {
             const role = messages[messages?.length - 1].role;
             if (role == 'user') {
-            //    GetAiResponse();
+                GetAiResponse();
             }
         }
         console.log(messages)
@@ -40,10 +40,12 @@ const ChatView = () => {
     //Used to get workspace data using workspace id
 
     const GetWorspaceData = async () => {
+        setLoading(true)
         const result = await convex.query(api.workspace.GetWorkspace, {
             workspaceId: id,
         });
         setMessages(result?.messages);
+        setLoading(false)
         console.log(result);
     }
 

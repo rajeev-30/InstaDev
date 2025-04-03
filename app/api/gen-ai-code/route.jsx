@@ -1,11 +1,12 @@
 import { GenAiCode } from "@/configs/AiModel";
+import { NextResponse } from "next/server";
 
 export async function POST(req) {
     const { prompt } = await req.json();
     try{
         const result = await GenAiCode.sendMessage(prompt);
         const response = result.response.text();
-        return NextResponse.json({result:response});
+        return NextResponse.json(JSON.parse(response));
     }catch(error){
         console.log("Gemini response error: ",error);
     }
