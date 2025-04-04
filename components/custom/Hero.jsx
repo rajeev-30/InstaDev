@@ -47,7 +47,7 @@ const Hero = () => {
     }   
 
     return (
-            <div className='mt-36 xl:mt-42 flex flex-col justify-center items-center gap-2'>
+            <div className='mt-36 ml-64 xl:mt-42 flex flex-col items-center justify-center gap-2'>
                 <h2 className='text-4xl font-extrabold '>{Lookup.HERO_HEADING}</h2>
                 <p className='text-gray-400 font-medium'>{Lookup.HERO_DESC}</p>
                 

@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { useParams } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown';
+import { useSidebar } from '../ui/sidebar';
 // import Markdown from 'react-markdown'
 
 const ChatView = () => {
@@ -22,6 +23,7 @@ const ChatView = () => {
     const [userInput, setUserInput] = useState("");
     const [loading, setLoading] = useState(false);
     const UpdateMessages = useMutation(api.workspace.UpdateMessages);
+    const {toggleSidebar} = useSidebar()
 
     useEffect(() => {
         id && GetWorspaceData();
@@ -97,25 +99,30 @@ const ChatView = () => {
             </div>
 
             {/* Input section  */}
-            <div className='p-5 border rounded-xl max-w-2xl w-full mt-3'
-                style={{ backgroundColor: Colors.BACKGRAOUND }}>
-                <div className='flex justify-between gap-2'>
-                    <textarea
-                        value={userInput}
-                        onChange={(e) => setUserInput(e.target.value)}
-                        // onKeyDown={handleKeyDown}
-                        type="text"
-                        placeholder={Lookup.INPUT_PLACEHOLDER}
-                        className='outline-none resize-none bg-transparent w-full h-32 max-h-52'
-                    />
-                    {userInput &&
-                        <ArrowRight
-                            onClick={() => onGenerate(userInput)}
-                            className='bg-blue-500 p-2 h-8 w-8 rounded-md cursor-pointer' />
-                    }
+            <div className='flex gap-6 items-end'>
+                <div className='-ml-14 flex'>
+                    {userDetails && <Image src={userDetails?.picture} width={30} height={30} onClick={toggleSidebar} className='rounded-full cursor-pointer' alt="UserImage" />}
                 </div>
-                <div>
-                    <Link className='h-5 w-5 cursor-pointer' />
+                <div className='p-5 border rounded-xl max-w-2xl w-full mt-3'
+                    style={{ backgroundColor: Colors.BACKGRAOUND }}>
+                    <div className='flex justify-between gap-2'>
+                        <textarea
+                            value={userInput}
+                            onChange={(e) => setUserInput(e.target.value)}
+                            // onKeyDown={handleKeyDown}
+                            type="text"
+                            placeholder={Lookup.INPUT_PLACEHOLDER}
+                            className='outline-none resize-none bg-transparent w-full h-32 max-h-52'
+                        />
+                        {userInput &&
+                            <ArrowRight
+                                onClick={() => onGenerate(userInput)}
+                                className='bg-blue-500 p-2 h-8 w-8 rounded-md cursor-pointer' />
+                        }
+                    </div>
+                    <div>
+                        <Link className='h-5 w-5 cursor-pointer' />
+                    </div>
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@ import React from 'react'
 
 const Workspace = () => {
   return (
-    <div className='px-8'>
+    <div className='pl-20 pr-4 mt-3'>
         <div className='grid grid-cols-1 md:grid-cols-3 gap-10'>
             <ChatView/>
             <div className='col-span-2'>

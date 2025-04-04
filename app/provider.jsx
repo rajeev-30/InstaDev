@@ -8,6 +8,8 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import dotenv from 'dotenv';
 import { useConvex } from 'convex/react'
 import { api } from '@/convex/_generated/api'
+import AppSideBar from '@/components/custom/AppSideBar'
+import { SidebarProvider } from '@/components/ui/sidebar'
 dotenv.config();
 
 const Provider = ({children}) => {
@@ -18,6 +20,7 @@ const Provider = ({children}) => {
   useEffect(()=>{
     IsAuthenticated();
   },[])
+
   const IsAuthenticated = async() =>{
     if(typeof window!==undefined){
       const user = JSON.parse(localStorage.getItem('user'));
@@ -39,8 +42,11 @@ const Provider = ({children}) => {
             enableSystem
             disableTransitionOnChange
             >
-              <Header/>
-              {children}
+                <Header/>
+              <SidebarProvider defaultOpen={false}>
+                <AppSideBar/>
+                {children}
+              </SidebarProvider>
             </NextThemesProvider>
           </MessageContext.Provider>
         </UserDetailContext.Provider>
