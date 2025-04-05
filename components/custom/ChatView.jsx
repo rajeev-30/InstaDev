@@ -13,8 +13,13 @@ import { useParams } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown';
 import { useSidebar } from '../ui/sidebar';
+
 // import Markdown from 'react-markdown'
 
+
+export const countTonken = (inputText) =>{
+    return inputText.trim().split(/\s+/).filter(word => word).length;
+}
 const ChatView = () => {
     const { id } = useParams();
     const convex = useConvex();
@@ -24,6 +29,7 @@ const ChatView = () => {
     const [loading, setLoading] = useState(false);
     const UpdateMessages = useMutation(api.workspace.UpdateMessages);
     const {toggleSidebar} = useSidebar()
+    const UpdateToken = useMutation(api.users.UpdateToken);
 
     useEffect(() => {
         id && GetWorspaceData();
@@ -64,7 +70,17 @@ const ChatView = () => {
             content: res.data.result
         }
         setMessages(prev=>[...prev, aiRes])
+        // console.log('LEN: ',countTonken(JSON.stringify(aiRes)));
         await UpdateMessages({ workspaceId: id, messages: [...messages, aiRes] })
+
+        const token = Number(userDetails?.token)-Number(countTonken(JSON.stringify(aiRes)))
+        //Update token in databse
+        await UpdateToken({
+            userId:userDetails?._id,
+            token:token
+        })
+
+
         setLoading(false);
     }
 

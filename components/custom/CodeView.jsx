@@ -17,15 +17,18 @@ import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import { Loader2Icon } from "lucide-react";
 import Colors from "@/data/Colors";
+import { UserDetailContext } from "@/context/UserDetailContext";
 
 const CodeView = () => {
   const {id} = useParams();
+  const {userDetails, setUserDetails } = useContext(UserDetailContext);
   const [activeTab, setActiveTab] = useState('code');
   const [files, setFiles] = useState(Lookup?.DEFAULT_FILE);
   const {messages, setMessages} = useContext(MessageContext);
   const UpdateFiles = useMutation(api.workspace.UpdateFiles);
   const [loading, setLoading] = useState(false);
   const convex = useConvex();
+  const UpdateToken = useMutation(api.users.UpdateToken);
 
   useEffect(()=>{
     id && GetFiles();
@@ -67,6 +70,15 @@ const CodeView = () => {
       workspaceId:id,
       files: aiRes?.files
     });
+    
+    const token = Number(userDetails?.token)-Number(countTonken(JSON.stringify(aiRes)))
+    //Update token in databse
+    await UpdateToken({
+      userId:userDetails?._id,
+      token:token
+    })
+
+    setActiveTab('code')
     setLoading(false)
   };
 
