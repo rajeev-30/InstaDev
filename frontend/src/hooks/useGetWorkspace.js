@@ -19,7 +19,7 @@ const useGetWorkspace = (id) => {
             dispatch(getWorkspace(res?.data?.workspace));
             dispatch(getMessages(res?.data?.workspace?.messages));
             dispatch(getFileData(res?.data?.workspace?.fileData));
-            console.log(res.data)
+            // console.log(res.data)
         } catch (error) {
             console.log("Fetch workspace error55: ", error);
             // toast("Workspace not found!");

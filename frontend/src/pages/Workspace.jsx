@@ -29,8 +29,8 @@ const Workspace = () => {
   //If user is not the owner of the workspace
   useEffect(() => {
     if(user && workspace && workspace?.user!=user?._id){
-      console.log("user",user?._id)
-      console.log("workspace",workspace?.user)
+      // console.log("user: ",user?._id)
+      // console.log("workspace: ",workspace?.user)
       navigate('/')
     }
   }, [workspace, id, user])

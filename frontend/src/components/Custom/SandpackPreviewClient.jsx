@@ -16,7 +16,7 @@ const SandpackPreviewClient = () => {
             // console.log("client: ",client)
             const result  = await client.getCodeSandboxURL();
             // window.open(`https://${result.sandboxId}.csb.app/` , '_blank');
-            console.log("result: ",result)
+            // console.log("result: ",result)
         }
     }
 

@@ -34,7 +34,7 @@ const SideBarFooter = () => {
                 withCredentials:true
             })
             toast(res.data.message);
-            console.log("Logout",res)
+            // console.log("Logout",res)
             dispatch(getSigninDialog(true));
             dispatch(getUserRefresh())
             dispatch(getWorkspaceRefresh())

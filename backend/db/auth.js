@@ -23,6 +23,6 @@ export const isAuthenticated = async(req, res, next) =>{
         next()
 
     } catch (error) {
-        console.log("isAuthentication error: " + error);
+        console.log("isAuthentication error: " , error);
     }
 }

@@ -41,7 +41,7 @@ const CodeView = () => {
                 GenerateAiCode();
             }
         }
-        console.log(messages)
+        // console.log(messages)
     }, [messages])
 
     const GenerateAiCode = async (input) => {
@@ -51,7 +51,7 @@ const CodeView = () => {
             const res = await axios.post(`${AI_API_END_POINT}/code`, {
                 prompt: PROMPT,
             }, { withCredentials: true });
-            console.log(res.data.result);
+            // console.log(res.data.result);
             const aiRes = res.data.result;
 
             const mergedFiles = { ...Lookup.DEFAULT_FILE, ...aiRes?.files };
