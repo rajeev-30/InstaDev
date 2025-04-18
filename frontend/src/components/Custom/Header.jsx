@@ -19,8 +19,8 @@ const Header = () => {
             {user ?
             <div className='flex gap-4 items-center'>
 
-                <h2 className='cursor-pointer'><Linkedin/></h2>
-                <h2 className='cursor-pointer'><Twitter/></h2>
+                <h2 className='cursor-pointer' onClick={()=>window.open('https://www.linkedin.com/in/rajeevkumar30/', '_blank')}><Linkedin/></h2>
+                {/* <h2 className='cursor-pointer'><Twitter/></h2> */}
 
                 <label htmlFor="my-drawer" className='cursor-pointer'>
                     <Avatar name={user?.name} />

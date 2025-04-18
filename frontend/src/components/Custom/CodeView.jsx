@@ -70,7 +70,7 @@ const CodeView = () => {
             setLoading(false)
         } catch (error) {
             console.log("AI Code response error: ", error);
-            toast("Something went wrong!");
+            toast("Something went wrong! Please try again later.");
             navigate('/')
 
         }
@@ -101,13 +101,13 @@ const CodeView = () => {
                 files={{
                     ...fileData,
                     '/App.js': {
-                        code: "/* This file is not required. Please ensure it is deleted before running your app. */"
+                        code: "/* This file is not required. */"
                     },
                     '/index.js': {
-                        code: "/* This file is not required. Please ensure it is deleted before running your app. */"
+                        code: "/* This file is not required. */"
                     },
                     '/styles.css': {
-                        code: "/* This file is not required. Please ensure it is deleted before running your app. */"
+                        code: "/* This file is not required. */"
                     },
                     'public/index.html': {
                         code: `<!DOCTYPE html>

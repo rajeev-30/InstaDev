@@ -74,9 +74,9 @@ const AppSideBar = () => {
                                     >
                                         <div
                                             onClick={() => navigate('/workspace/' + workspace?._id)}
-                                            className='w-full'
+                                            className='w-full '
                                         >
-                                            <label htmlFor="my-drawer">
+                                            <label htmlFor="my-drawer" className='cursor-pointer'>
                                                 {workspace?.messages?.[0]?.content?.split(" ").length > 4
                                                     ? workspace?.messages?.[0]?.content?.split(" ").slice(0, 4).join(" ") + '...'
                                                     : workspace?.messages?.[0]?.content}

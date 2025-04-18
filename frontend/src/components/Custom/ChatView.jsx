@@ -78,7 +78,7 @@ const ChatView = () => {
 
         } catch (error) {
             console.log("AI Chat response error: ", error);
-            toast("Something went wrong!");
+            toast("Something went wrong! Please try again later.");
             navigate('/')
         }
     }
