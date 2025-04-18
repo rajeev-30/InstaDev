@@ -76,9 +76,11 @@ const AppSideBar = () => {
                                             onClick={() => navigate('/workspace/' + workspace?._id)}
                                             className='w-full'
                                         >
-                                            {workspace?.messages?.[0]?.content?.split(" ").length > 4
-                                                ? workspace?.messages?.[0]?.content?.split(" ").slice(0, 4).join(" ") + '...'
-                                                : workspace?.messages?.[0]?.content}
+                                            <label htmlFor="my-drawer">
+                                                {workspace?.messages?.[0]?.content?.split(" ").length > 4
+                                                    ? workspace?.messages?.[0]?.content?.split(" ").slice(0, 4).join(" ") + '...'
+                                                    : workspace?.messages?.[0]?.content}
+                                            </label>
                                         </div>
                                         <Trash2
                                             height={16}

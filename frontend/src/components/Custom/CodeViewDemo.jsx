@@ -9,10 +9,8 @@ import {
 import Lookup from '@/data/Lookup';
 import { nightOwl } from "@codesandbox/sandpack-themes";
 import { useDispatch, useSelector } from 'react-redux';
-import { file } from 'jszip';
 import axios from 'axios';
 import { AI_API_END_POINT, USER_API_END_POINT, WORKSPACE_API_END_POINT } from '@/Utils/Constant';
-import { getFileData } from '@/redux/workspaceSlice';
 import { useParams } from 'react-router-dom';
 import Prompt from '@/data/Prompt';
 import { getRefresh as getWorkspaceRefresh } from '@/redux/workspaceSlice';

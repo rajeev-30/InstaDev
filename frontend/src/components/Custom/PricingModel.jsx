@@ -22,4 +22,5 @@ const PricingModel = () => {
     )
 }
 
+
 export default PricingModel

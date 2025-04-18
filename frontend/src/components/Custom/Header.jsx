@@ -5,7 +5,7 @@ import { Download, Linkedin, Rocket, Twitter, TwitterIcon, X } from 'lucide-reac
 import { Colors } from '../../data/Colors';
 import { Button } from '../ui/button';
 import { getSigninDialog } from '@/redux/userSlice';
-import AppSideBar, { Avatar } from './AppSideBar';
+import { Avatar } from './AppSideBar';
 
 
 const Header = () => {
@@ -14,13 +14,17 @@ const Header = () => {
     
     return (
         <div className='py-1 px-4 flex justify-between items-center pt-2'>
-            <img src={logo} alt="logo" width={60} height={60}/>
+            <img src={logo} alt="logo" width={60} height={60} className='cursor-pointer'/>
 
             {user ?
             <div className='flex gap-4 items-center'>
-                <h2><Linkedin/></h2>
-                <h2><Twitter/></h2>
-                {/* <Avatar name={user.name} /> */}
+
+                <h2 className='cursor-pointer'><Linkedin/></h2>
+                <h2 className='cursor-pointer'><Twitter/></h2>
+
+                <label htmlFor="my-drawer" className='cursor-pointer'>
+                    <Avatar name={user?.name} />
+                </label>
             </div>
                 :
                 <div className='flex gap-4 items-center'>

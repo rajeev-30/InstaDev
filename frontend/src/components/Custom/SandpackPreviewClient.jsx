@@ -12,9 +12,9 @@ const SandpackPreviewClient = () => {
     const GetSandpackClient = async() => {
         const client = previewRef.current?.getClient();
         if(client){
-            console.log(client)
+            // console.log("client: ",client)
             const result  = await client.getCodeSandboxURL();
-            console.log(result)
+            // console.log("result: ",result)
         }
     }
 

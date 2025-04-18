@@ -1,4 +1,3 @@
-import { store } from '@/redux/store'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactMarkdown from 'react-markdown';
@@ -113,9 +112,12 @@ const ChatView = () => {
 
                 {messages && messages?.map((msg, index) => (
                     <div key={index} style={{ backgroundColor: Colors.BACKGRAOUND }}
-                    className='p-3 rounded-lg mb-3 flex gap-2 items-center leading-7'>
+                    className='p-3 rounded-lg mb-3 flex gap-2 leading-7'>
                         {/* {msg?.role == 'user' && <img src={user?.picture} width={30} height={30} className='rounded-full'/>} */}
-                        {msg?.role == 'user' && <Avatar name={user.name} />}
+                        {msg?.role == 'user' && 
+                        <div className='h-9 w-9'>
+                            <Avatar name={user?.name} />
+                        </div>}
 
                         <div className="flex flex-col gap-5">
                             <ReactMarkdown>{msg.content}</ReactMarkdown>
@@ -135,7 +137,7 @@ const ChatView = () => {
             <div className='flex gap-6 items-end'>
                 <div className='-ml-6 flex'>
                 {user && <AppSideBar/>}
-                    {/* {user && <img src={user?.picture} width={30} height={30}  className='rounded-full cursor-pointer' alt="UserImage" onClick={openDrawer} />} */}
+                    {/* {user && <img src={user?.picture} width={30} height={30}  className='rounded-full cursor-pointer' alt="UserImage"/>} */}
                 </div>
                 <div className='p-5 border border-gray-600 rounded-xl max-w-2xl w-full mt-3'
                     style={{ backgroundColor: Colors.BACKGRAOUND }}>

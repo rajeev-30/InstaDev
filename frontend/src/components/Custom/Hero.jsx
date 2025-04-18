@@ -2,11 +2,9 @@ import { Colors } from '@/data/Colors'
 import Lookup from '@/data/Lookup'
 import { ArrowRight, ArrowRightCircle, MessageCircle, SidebarOpen } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import Login from '../Auth/LoginDialog'
 import LoginDialog from '../Auth/LoginDialog'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSigninDialog } from '@/redux/userSlice'
-import { getMessages } from '@/redux/workspaceSlice'
 import axios from 'axios'
 import { WORKSPACE_API_END_POINT } from '@/Utils/Constant'
 import { useNavigate } from 'react-router-dom'
@@ -43,7 +41,6 @@ const Hero = () => {
                 role: 'user',
                 content: input
             }
-
             const res = await axios.post(`${WORKSPACE_API_END_POINT}/create`, {
                 message
             }, { withCredentials: true })
@@ -71,7 +68,6 @@ const Hero = () => {
                             type="text"
                             onKeyDown={handleKeyDown}
                             onChange={(e) => setInput(e.target.value)} />
-
                         {
                             input &&
                             <ArrowRight

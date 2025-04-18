@@ -32,7 +32,7 @@ export const aiCodeGen = async(req, res) =>{
         return res.status(200).json({
             message: "Ai code response",
             success: true,
-            result:JSON.parse(result)
+            result: await JSON.parse(result)
         })
     } catch (error) {
         console.log("Gemini code response error: ", error);

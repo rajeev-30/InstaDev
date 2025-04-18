@@ -9,17 +9,16 @@ import {
 import Lookup from '@/data/Lookup';
 import { nightOwl } from "@codesandbox/sandpack-themes";
 import { useDispatch, useSelector } from 'react-redux';
-import { file } from 'jszip';
 import axios from 'axios';
 import { AI_API_END_POINT, USER_API_END_POINT, WORKSPACE_API_END_POINT } from '@/Utils/Constant';
-import { getFileData } from '@/redux/workspaceSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import Prompt from '@/data/Prompt';
 import { getRefresh as getWorkspaceRefresh } from '@/redux/workspaceSlice';
 import { getRefresh as getUserRefresh } from '@/redux/userSlice';
 import { Loader2Icon } from 'lucide-react';
 import SandpackPreviewClient from './SandpackPreviewClient';
-import WorkspaceHeader from './WorkspaceHeader';
+import { toast } from 'sonner';
+
 
 const CodeView = () => {
     const { user } = useSelector(store => store.user)
@@ -34,11 +33,7 @@ const CodeView = () => {
     const countTonken = (inputText) => {
         return inputText.trim().split(/\s+/).filter(word => word).length;
     }
-    useEffect(()=>{
-        if(!fileData) setLoading(true);
-        else setLoading(false)
-    },[fileData])
-    
+
     useEffect(() => {
         if (messages?.length > 0) {
             const role = messages[messages?.length - 1].role;
@@ -77,7 +72,7 @@ const CodeView = () => {
             console.log("AI Code response error: ", error);
             toast("Something went wrong!");
             navigate('/')
-            
+
         }
     };
 
@@ -91,7 +86,7 @@ const CodeView = () => {
                         onClick={() => setActiveTab('code')}>
                         Code
                     </h2>
-
+                        
                     <h2 className={`text-sm cursor-pointer w-[50%] text-center py-0.5
             ${activeTab === 'preview' ? 'text-blue-600  bg-blue-300 bg-opacity-20 rounded-full' : ''}`}
                         onClick={() => setActiveTab('preview')}>
@@ -106,14 +101,30 @@ const CodeView = () => {
                 files={{
                     ...fileData,
                     '/App.js': {
-                        code: "/* This file is not required. Please ensure it is deleted before running your app. */" 
+                        code: "/* This file is not required. Please ensure it is deleted before running your app. */"
                     },
                     '/index.js': {
-                        code: "/* This file is not required. Please ensure it is deleted before running your app. */" 
+                        code: "/* This file is not required. Please ensure it is deleted before running your app. */"
                     },
                     '/styles.css': {
-                        code: "/* This file is not required. Please ensure it is deleted before running your app. */" 
-                    }
+                        code: "/* This file is not required. Please ensure it is deleted before running your app. */"
+                    },
+                    'public/index.html': {
+                        code: `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+                        `
+                    },
+
                 }}
                 theme={nightOwl}
                 customSetup={{
@@ -130,7 +141,6 @@ const CodeView = () => {
                     externalResources: ["https://cdn.tailwindcss.com"]
                 }}
             >
-                <WorkspaceHeader />
                 <SandpackLayout>
                     {
                         activeTab === 'code' ?
@@ -139,7 +149,7 @@ const CodeView = () => {
                                 <SandpackCodeEditor style={{ height: '83.5vh' }} />
                             </>
                             :
-                            <SandpackPreviewClient/>
+                            <SandpackPreviewClient />
                     }
                 </SandpackLayout>
             </SandpackProvider>
