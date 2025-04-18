@@ -48,13 +48,13 @@ app.use("/api/v1/workspace", workspaceRoute);
 connnectDB();
 
 //Serving frontend
-const __dirname = path.resolve();
+// const __dirname = path.resolve();
 
-app.use(express.static(path.join(__dirname, "frontend", "dist")));
+// app.use(express.static(path.join(__dirname, "frontend", "dist")));
 
-app.get("/", (_, res) => {
-    res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
-})
+// app.get("/", (_, res) => {
+//     res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+// })
 
 app.listen(port, ()=>{
     console.log(`Server is running on port ${port}`);
