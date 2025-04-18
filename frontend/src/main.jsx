@@ -5,13 +5,11 @@ import App from './App.jsx'
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import {Provider} from 'react-redux'
 import { store } from './redux/store';
-// import dotenv from "dotenv";
-
-// dotenv.config();
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 createRoot(document.getElementById('root')).render(
   // <StrictMode>
-  <GoogleOAuthProvider clientId="292677513827-iv7ndceft3lq4ao1qo6mdd6514o2nh35.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
     <Provider store={store}>
       <App />
     </Provider>
