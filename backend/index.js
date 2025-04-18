@@ -6,6 +6,7 @@ import aiRoute from "./routes/ai.route.js";
 import userRoute from "./routes/user.route.js";
 import workspaceRoute from "./routes/workspace.route.js"
 import cors from "cors"
+import path from "path"
 
 dotenv.config({
     path: "./.env"
@@ -14,8 +15,10 @@ dotenv.config({
 const app = express();
 const port = process.env.PORT || 5000;
 
+
+
 //cors
-const allowedOrigins = ["http://localhost:8000", "http://localhost:5173"];
+const allowedOrigins = ["http://localhost:8080", "http://localhost:5173"];
 const corsOptions = {
     origin: (origin, callback) => {
         // Allow requests with no origin (like mobile apps, curl requests)
@@ -43,6 +46,15 @@ app.use("/api/v1/workspace", workspaceRoute);
 
 
 connnectDB();
+
+//Serving frontend
+const __dirname = path.resolve();
+
+app.use(express.static(path.join(__dirname, "frontend", "dist")));
+
+app.get("/", (_, res) => {
+    res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+})
 
 app.listen(port, ()=>{
     console.log(`Server is running on port ${port}`);

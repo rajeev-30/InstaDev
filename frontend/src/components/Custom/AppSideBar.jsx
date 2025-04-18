@@ -1,5 +1,5 @@
 import React from 'react'
-import { MessageCircle, Trash2 } from 'lucide-react'
+import { Loader2Icon, MessageCircle, Trash2 } from 'lucide-react'
 import { Button } from '../ui/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
@@ -8,6 +8,7 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { getRefresh } from '@/redux/workspaceSlice'
 import { WORKSPACE_API_END_POINT } from '@/Utils/Constant'
+import { Colors } from '@/data/Colors'
 
 
 export const Avatar = ({ name }) => {
@@ -67,7 +68,7 @@ const AppSideBar = () => {
                         <h2 className='font-medium px-2 mb-4 text-lg font-md pt-4'>Your chats</h2>
                         <div className='overflow-y-scroll max-h-[64vh]'>
                             {
-                                userWorkspaces && [...userWorkspaces].reverse().map((workspace, index) =>
+                                userWorkspaces ? [...userWorkspaces].reverse().map((workspace, index) =>
                                     <div
                                         key={index}
                                         className='group flex justify-between items-center px-2 py-1.5 mb-1 rounded-lg text-sm text-gray-400 hover:text-white cursor-pointer hover:bg-gray-600/25'
@@ -88,8 +89,12 @@ const AppSideBar = () => {
                                             className='hidden group-hover:block hover:text-red-400'
                                             onClick={()=>deleteWorkspace(workspace?._id)}
                                         />
-                                    </div>
-                                )
+                                    </div> 
+                                ) :
+                                <div style={{ backgroundColor: Colors.BACKGRAOUND }} className='px-1 rounded-lg mb-2 flex gap-2 items-start'>
+                                    <Loader2Icon className='animate-spin h-5 w-5' />
+                                    <h2>Cooking...</h2>
+                                </div>
                             }
                         </div>
                     </div>
