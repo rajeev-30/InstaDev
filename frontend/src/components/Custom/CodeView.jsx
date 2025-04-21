@@ -41,17 +41,17 @@ const CodeView = () => {
                 GenerateAiCode();
             }
         }
-        // console.log(messages)
+        console.log(messages)
     }, [messages])
 
     const GenerateAiCode = async (input) => {
         try {
             setLoading(true);
-            const PROMPT = JSON.stringify(messages) + " " + Prompt.CODE_GEN_PROMPT;
+            const PROMPT = JSON.stringify(messages);
             const res = await axios.post(`${AI_API_END_POINT}/code`, {
                 prompt: PROMPT,
             }, { withCredentials: true });
-            // console.log(res.data.result);
+            console.log(res.data.result);
             const aiRes = res.data.result;
 
             const mergedFiles = { ...Lookup.DEFAULT_FILE, ...aiRes?.files };
@@ -67,12 +67,14 @@ const CodeView = () => {
             dispatch(getWorkspaceRefresh())
 
             setActiveTab('code')
-            setLoading(false)
         } catch (error) {
             console.log("AI Code response error: ", error);
             toast("Something went wrong! Please try again later.");
             navigate('/')
 
+        }
+        finally {
+            setLoading(false)
         }
     };
 

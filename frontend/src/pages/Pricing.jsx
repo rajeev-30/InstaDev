@@ -7,6 +7,16 @@ import useGetUserWorkspaces from '@/hooks/useGetUserWorkspaces'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+const formatNumber = (num) => {
+    if (num >= 1000000) {
+        return Math.floor(num / 1000000) + 'M ';
+    }
+    if (num >= 1000) {
+        return Math.floor(num / 1000) + 'K ';
+    }
+    return num.toString();
+}
+
 const Pricing = () => {
     const {user} = useSelector(store=>store.user)
     useGetUser()
@@ -19,7 +29,7 @@ const Pricing = () => {
             <div className='w-full p-4 border rounded-xl flex justify-between items-center mt-6' 
             style={{backgroundColor: Colors.BACKGRAOUND}}>
                 <h2 className='text-lg'>
-                    <span className='font-bold'> {user?.tokens} </span> 
+                    <span className='font-bold'>{formatNumber(user?.tokens || 0)}</span> 
                     Tokens Left
                 </h2>
                 <div>

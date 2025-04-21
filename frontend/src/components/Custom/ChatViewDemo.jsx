@@ -1,32 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactMarkdown from 'react-markdown';
 import { Colors } from '@/data/Colors';
-import { ArrowRight, Loader2Icon } from 'lucide-react';
+import { ArrowRight, Link, Loader2Icon } from 'lucide-react';
 import Lookup from '@/data/Lookup';
 import axios from 'axios';
 import { AI_API_END_POINT, USER_API_END_POINT, WORKSPACE_API_END_POINT } from '@/Utils/Constant';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getRefresh as getWorkspaceRefresh } from '@/redux/workspaceSlice';
 import { getRefresh as getUserRefresh } from '@/redux/userSlice';
+import Prompt from '@/data/Prompt';
 import { toast } from 'sonner';
 import AppSideBar, { Avatar } from './AppSideBar';
-import TooltipText from './TooltipText';
-
 
 const ChatView = () => {
-    const { messages } = useSelector(store => store.workspace)
-    const { user } = useSelector(store => store.user)
+    const {messages} = useSelector(store=>store.workspace)
+    const {user} = useSelector(store=>store.user)
     const [userInput, setUserInput] = useState("")
     const [loading, setLoading] = useState(false)
-    const [toolTipLoading, setToolTipLoading] = useState(false)
     const params = useParams();
     const { id } = params;
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const ref = useRef(null)
 
-    const countTonken = (inputText) => {
+    const countTonken = (inputText) =>{
         return inputText.trim().split(/\s+/).filter(word => word).length;
     }
 
@@ -39,27 +36,27 @@ const ChatView = () => {
         }
     };
 
-    useEffect(() => {
-        if (!messages) setLoading(true)
-        else setLoading(false)
+    // useEffect(() => {
+    //     if(!messages) setLoading(true)
+    //     else setLoading(false)
 
-        if (messages?.length > 0) {
-            const role = messages[messages?.length - 1].role;
-            if (role == 'user') {
-                GetAiResponse();
-            }
-        }
-        // console.log(messages)
-    }, [messages])
+    //     if (messages?.length > 0) {
+    //         const role = messages[messages?.length - 1].role;
+    //         if (role == 'user') {
+    //             GetAiResponse();
+    //         }
+    //     }
+    //     // console.log(messages)
+    // }, [messages])
 
 
-    const GetAiResponse = async () => {
+    const GetAiResponse = async () =>{
         try {
             setLoading(true);
             const PROMPT = JSON.stringify(messages);
             const res = await axios.post(`${AI_API_END_POINT}/chat`, {
                 prompt: PROMPT,
-            }, { withCredentials: true })
+            }, {withCredentials: true})
 
             // console.log(res.data.result);
             const aiRes = {
@@ -67,41 +64,39 @@ const ChatView = () => {
                 content: res.data.result
             }
 
-            await axios.post(`${WORKSPACE_API_END_POINT}/update/messages/${id}`,
-                { message: aiRes },
-                { withCredentials: true }
+            await axios.post(`${WORKSPACE_API_END_POINT}/update/messages/${id}`, 
+                {message: aiRes}, 
+                {withCredentials: true}
             )
 
-            const tokens = Number(user?.tokens) - Number(countTonken(JSON.stringify(aiRes)))
-            await axios.post(`${USER_API_END_POINT}/update/tokens/`, { tokens }, { withCredentials: true })
+            const tokens = Number(user?.tokens)-Number(countTonken(JSON.stringify(aiRes)))
+            await axios.post(`${USER_API_END_POINT}/update/tokens/`, {tokens}, {withCredentials: true})
 
             dispatch(getUserRefresh())
             dispatch(getWorkspaceRefresh())
+            setLoading(false);
 
         } catch (error) {
             console.log("AI Chat response error: ", error);
             toast("Something went wrong! Please try again later.");
             navigate('/')
         }
-        finally {
-            setLoading(false)
-        }
     }
 
 
-    const onGenerate = async () => {
-        if (user?.tokens < 10) {
+    const onGenerate = async() =>{
+        if(user?.tokens<10) {
             toast("You don't have enough tokens! Upgrad to Premium");
             return;
         }
         const message = {
-            role: 'user',
+            role:'user',
             content: userInput
         }
         try {
-            await axios.post(`${WORKSPACE_API_END_POINT}/update/messages/${id}`,
-                { message },
-                { withCredentials: true }
+            await axios.post(`${WORKSPACE_API_END_POINT}/update/messages/${id}`, 
+                {message}, 
+                {withCredentials: true}
             )
             dispatch(getWorkspaceRefresh())
             setUserInput("")
@@ -110,36 +105,27 @@ const ChatView = () => {
         }
     }
 
-    const handleHeight = () => {
-            ref.current.style.height = 'auto';
-            ref.current.style.height = `${Math.min(ref.current.scrollHeight, 384)}px`;
-        }
-    
-    useEffect(() => {
-        handleHeight();
-    }, [userInput]);
-
     return (
         <div className='relative h-[90vh] flex flex-col'>
-
+            
             <div className='flex-1 overflow-y-scroll scrollbar-hide '>
 
                 {messages && messages?.map((msg, index) => (
                     <div key={index} style={{ backgroundColor: Colors.BACKGRAOUND }}
-                        className='py-3 px-5 rounded-lg mb-3 flex gap-2 leading-7'>
+                    className='p-3 rounded-lg mb-3 flex gap-2 leading-7'>
                         {/* {msg?.role == 'user' && <img src={user?.picture} width={30} height={30} className='rounded-full'/>} */}
-                        {msg?.role == 'user' &&
-                            <div className='h-9 w-9'>
-                                <Avatar name={user?.name} />
-                            </div>}
+                        {msg?.role == 'user' && 
+                        <div className='h-9 w-9'>
+                            <Avatar name={user?.name} />
+                        </div>}
 
-                        <div className="flex flex-col gap-5 text-[14px] text-ghray-200">
+                        <div className="flex flex-col gap-5">
                             <ReactMarkdown>{msg.content}</ReactMarkdown>
                         </div>
                     </div>
                 ))}
 
-                {loading &&
+                { loading && 
                     <div style={{ backgroundColor: Colors.BACKGRAOUND }} className='p-3 rounded-lg mb-2 flex gap-2 items-start'>
                         <Loader2Icon className='animate-spin h-5 w-5' />
                         <h2>Cooking...</h2>
@@ -148,24 +134,21 @@ const ChatView = () => {
             </div>
 
             {/* Input section  */}
-            <div className='flex gap-6 items-end '>
+            <div className='flex gap-6 items-end'>
                 <div className='-ml-6 flex'>
-                    {user && <AppSideBar />}
+                {user && <AppSideBar/>}
                     {/* {user && <img src={user?.picture} width={30} height={30}  className='rounded-full cursor-pointer' alt="UserImage"/>} */}
                 </div>
-                <div className='px-4 pb-1 border border-gray-800 rounded-xl max-w-2xl w-full mt-3'
+                <div className='p-5 border border-gray-600 rounded-xl max-w-2xl w-full mt-3'
                     style={{ backgroundColor: Colors.BACKGRAOUND }}>
-                    <div className='py-2 flex justify-between gap-2'>
+                    <div className='flex justify-between gap-2'>
                         <textarea
-                            ref={ref}
                             value={userInput}
-                            onChange={(e) => {
-                                setUserInput(e.target.value);
-                            }}
+                            onChange={(e) => setUserInput(e.target.value)}
                             onKeyDown={handleKeyDown}
                             type="text"
                             placeholder={Lookup.INPUT_PLACEHOLDER}
-                            className='text-[14px] outline-none resize-none bg-transparent w-full min-h-32 max-h-96'
+                            className='outline-none resize-none bg-transparent w-full h-32 max-h-52'
                         />
                         {userInput.trim() &&
                             <ArrowRight
@@ -173,9 +156,8 @@ const ChatView = () => {
                                 className='bg-blue-500 p-2 h-8 w-8 rounded-md cursor-pointer' />
                         }
                     </div>
-                    <div className='pt-3'>
-                        {/* <Link className='h-5 w-5 cursor-pointer' /> */}
-                        <TooltipText input={userInput} setInput={setUserInput} loading={toolTipLoading} setLoading={setToolTipLoading} />
+                    <div>
+                        <Link className='h-5 w-5 cursor-pointer' />
                     </div>
                 </div>
             </div>

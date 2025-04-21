@@ -13,7 +13,7 @@ const PricingModel = () => {
                     <p className='text-gray-400'>{pricing.desc}</p>
                     <div>
                         <span className='font-bold text-4xl mt-6'>${pricing.price}</span>
-                        <span>/month</span>
+                        {/* <span>/month</span> */}
                     </div>
                     <Button variant='white' className='cursor-pointer'>Upgrad to {pricing.name}</Button>
                 </div>

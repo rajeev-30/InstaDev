@@ -21,6 +21,7 @@ export const Avatar = ({ name }) => {
     );
 };
 
+
 const AppSideBar = () => {
     const { user } = useSelector(store => store.user)
     const { userWorkspaces } = useSelector(store => store.workspace)
@@ -71,23 +72,25 @@ const AppSideBar = () => {
                                 userWorkspaces ? [...userWorkspaces].reverse().map((workspace, index) =>
                                     <div
                                         key={index}
-                                        className='group flex justify-between items-center px-2 py-1.5 mb-1 rounded-lg text-sm text-gray-400 hover:text-white cursor-pointer hover:bg-gray-600/25'
+                                        className='group flex justify-between items-center px-2 py-1.5 mb-1 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-600/25'
                                     >
-                                        <div
-                                            onClick={() => navigate('/workspace/' + workspace?._id)}
-                                            className='w-full '
-                                        >
-                                            <label htmlFor="my-drawer" className='cursor-pointer'>
-                                                {workspace?.messages?.[0]?.content?.split(" ").length > 4
-                                                    ? workspace?.messages?.[0]?.content?.split(" ").slice(0, 4).join(" ") + '...'
-                                                    : workspace?.messages?.[0]?.content}
-                                            </label>
-                                        </div>
+                                        <label htmlFor="my-drawer" className='cursor-pointer w-full'>
+                                            <div
+                                                onClick={() => navigate('/workspace/' + workspace?._id)}
+                                                className='w-full'
+                                            >
+                                                    {workspace?.messages?.[0]?.content?.split(" ").length > 4
+                                                        ? workspace?.messages?.[0]?.content?.split(" ").slice(0, 4).join(" ") + '...'
+                                                        : workspace?.messages?.[0]?.content}
+                                            </div>
+                                        </label>
                                         <Trash2
                                             height={16}
                                             width={16}
-                                            className='hidden group-hover:block hover:text-red-400'
-                                            onClick={()=>deleteWorkspace(workspace?._id)}
+                                            className='hidden group-hover:block hover:text-red-400 cursor-pointer'
+                                            onClick={() => 
+                                                deleteWorkspace(workspace?._id)
+                                            }
                                         />
                                     </div> 
                                 ) :

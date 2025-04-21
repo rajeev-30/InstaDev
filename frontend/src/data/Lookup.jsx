@@ -106,9 +106,9 @@ export default config;
       price: 19.99,
     },
     {
-      name: "Unlimted",
-      tokens: "Unmited",
-      value: 999999999,
+      name: "10M",
+      tokens: "10M",
+      value: 10000000,
       desc: "Designed for professionals who need to use InstaDev a few times per week.",
       price: 49.99,
     },
