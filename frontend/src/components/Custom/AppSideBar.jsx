@@ -79,9 +79,9 @@ const AppSideBar = () => {
                                                 onClick={() => navigate('/workspace/' + workspace?._id)}
                                                 className='w-full'
                                             >
-                                                    {workspace?.messages?.[0]?.content?.split(" ").length > 4
-                                                        ? workspace?.messages?.[0]?.content?.split(" ").slice(0, 4).join(" ") + '...'
-                                                        : workspace?.messages?.[0]?.content}
+                                                    {
+                                                        workspace?.messages?.[0]?.content?.split(" ").slice(0, 5).join(" ")
+                                                    } 
                                             </div>
                                         </label>
                                         <Trash2
@@ -94,9 +94,9 @@ const AppSideBar = () => {
                                         />
                                     </div> 
                                 ) :
-                                <div style={{ backgroundColor: Colors.BACKGRAOUND }} className='px-1 rounded-lg mb-2 flex gap-2 items-start'>
-                                    <Loader2Icon className='animate-spin h-5 w-5' />
-                                    <h2>Cooking...</h2>
+                                <div style={{ backgroundColor: Colors.BACKGRAOUND }} className='px-2 py-3 rounded-lg mb-2 flex gap-2 items-start'>
+                                    <Loader2Icon className='text-gray-400 animate-spin h-5 w-5' />
+                                    <h2 className='text-gray-400'>Cooking...</h2>
                                 </div>
                             }
                         </div>

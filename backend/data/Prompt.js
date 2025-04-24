@@ -16,7 +16,7 @@ also you can use date-fns for date format and react-chartjs-2 chart, graph libra
 
 **This is the Most Important Instruction, do always consider this at any cost**:  Always create App.jsx, main.jsx, index.css under src folder, and index.html in root directory.
 
-And make sure you import all the required components, and always use '?' for optional components.
+And make sure you import all the required components especially from 'lucide-react', and always use '?' for optional components.
 
 Return the response in JSON format with the following schema:
 {
@@ -39,7 +39,7 @@ And add all the required dependencies in package.json, use latest version of all
 
 **This is the Most Important Instruction, do always consider this at any cost**: Always create App.jsx and main.jsx and index.css in src folder, and index.html in root directory.
 
-And make sure you import all the required components, ans always use '?' for optional components when needed.
+And make sure you import all the required components especially from 'lucide-react', and always use '?' for optional components.
 
 Return the response in JSON format with the following schema: 
 
