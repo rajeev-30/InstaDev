@@ -39,7 +39,7 @@ const Hero = () => {
                 return;
             }
             if (user?.tokens < 10) {
-                toast("You don't have enough tokens! Upgrad to Premium");
+                toast("You don't have enough tokens! Upgrade to Premium");
                 return;
             }
             const message = {
