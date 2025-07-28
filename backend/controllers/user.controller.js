@@ -36,7 +36,7 @@ export const googleLogin = async (req, res) => {
                 httpOnly: true,
                 maxAge: 30 * 24 * 60 * 60 * 1000,
                 secure: true,
-                sameSite: 'strict'
+                sameSite: 'None'
             })
             .json({
                 message: "User Login successfully",
@@ -55,7 +55,7 @@ export const Logout = async (req, res) => {
         expiresIn: new Date(Date.now()),
         httpOnly:true,
         secure: true,
-        sameSite: 'strict'
+        sameSite: 'None'
     })
     .json({
         message: `You logged out successfully`,
