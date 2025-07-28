@@ -36,7 +36,7 @@ const port = process.env.PORT || 5000;
 
 app.use(
     cors({
-        origin: ["http://localhost:5173", "http://localhost:8080"], // Add your domains
+        origin: ["http://localhost:5173", "http://localhost:8080", "https://instadev-rx.vercel.app"], // Add your domains
         credentials: true,
     })
 );
