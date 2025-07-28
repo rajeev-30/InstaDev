@@ -6,18 +6,26 @@ import { AI_API_END_POINT } from '@/Utils/Constant'
 import axios from 'axios'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { RefreshCcw } from 'lucide-react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getSigninDialog } from '@/redux/userSlice'
 
-const TooltipText = ({input, setInput, loading, setLoading}) => {
+const TooltipText = ({ input, setInput, loading, setLoading }) => {
+    const { user } = useSelector(store => store.user)
+    const dispatch = useDispatch()
     const enhancePrompt = async () => {
+
+        if (!user) {
+            dispatch(getSigninDialog(true));
+            return;
+        }
+
         try {
             setLoading(true)
             const res = await axios.post(`${AI_API_END_POINT}/enhance`, {
                 prompt: input
             }, { withCredentials: true })
-            // const markdownContent = <ReactMarkdown>{res.data.result}</ReactMarkdown>
-            // console.log("Enhance Prompt response: ", res.data.result)
-            // console.log("Enhance Prompt markdownContent: ", markdownContent.props)
             setInput(res.data.result)
+            
         } catch (error) {
             console.log("Enhance Prompt error: ", error)
             toast("Something went wrong! Please try again later.");

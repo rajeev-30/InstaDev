@@ -18,21 +18,28 @@ const port = process.env.PORT || 5000;
 
 
 //cors
-const allowedOrigins = ["http://localhost:8080", "http://localhost:5173"];
-const corsOptions = {
-    origin: (origin, callback) => {
-        // Allow requests with no origin (like mobile apps, curl requests)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true // Allow credentials
-};
+// const allowedOrigins = ["http://localhost:8080", "http://localhost:5173"];
+// const corsOptions = {
+//     origin: (origin, callback) => {
+//         // Allow requests with no origin (like mobile apps, curl requests)
+//         if (!origin) return callback(null, true);
+//         if (allowedOrigins.includes(origin)) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     credentials: true // Allow credentials
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+
+app.use(
+    cors({
+        origin: ["http://localhost:5173", "http://localhost:8080"], // Add your domains
+        credentials: true,
+    })
+);
 
 //middlewares
 app.use(express.urlencoded({ extended: true, limit: '16mb' }));
@@ -56,6 +63,6 @@ connnectDB();
 //     res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 // })
 
-app.listen(port, ()=>{
+app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 })

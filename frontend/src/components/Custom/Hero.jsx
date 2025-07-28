@@ -36,6 +36,7 @@ const Hero = () => {
         try {
             if (!user) {
                 dispatch(getSigninDialog(true));
+                return;
             }
             if (user?.tokens < 10) {
                 toast("You don't have enough tokens! Upgrad to Premium");
