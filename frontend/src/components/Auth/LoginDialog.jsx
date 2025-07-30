@@ -22,18 +22,20 @@ import { Button } from "../ui/button";
 import { Colors } from "@/data/Colors";
 import { getRefresh as getWorkspaceRefresh } from '@/redux/workspaceSlice';
 import { getRefresh as getUserRefresh } from '@/redux/userSlice';
+import { Loader2Icon } from "lucide-react";
 
 
 const LoginDialog = () => {
     const { signinDialog } = useSelector(store => store.user);
     const dispatch = useDispatch()
-
+    const [loading, setLoading] = useState(false)
     const handleSuccess = async (credentialResponse) => {
         try {
+            setLoading(true)
             const res = await axios.post(`${USER_API_END_POINT}/login`, {
                 token: credentialResponse.credential,
             }, { withCredentials: true });
-
+            
             // dispatch(getUser(res.data.user));
             // console.log(credentialResponse.credential)
             dispatch(getSigninDialog(false));
@@ -41,6 +43,8 @@ const LoginDialog = () => {
             dispatch(getWorkspaceRefresh())
         } catch (err) {
             console.error("Login error:", err);
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -58,10 +62,23 @@ const LoginDialog = () => {
                                 <div className='mt-6 text-center'>{Lookup.SIGNIN_SUBHEADING}</div>
 
                                 <div className="mt-4">
-                                    <GoogleLogin
-                                        onSuccess={handleSuccess}
-                                        onError={(err) => console.log("Login Failed: ",err)}
-                                    />
+                                    {
+                                        loading ?
+                                            <div  className='p-3 rounded-lg mb-2 flex gap-2 items-start'>
+                                                <Loader2Icon className='text-white text-lg animate-spin h-7 w-7' />
+                                                <h2 className="text-white text-lg">Signing in...</h2>
+                                            </div>
+                                        :
+                                        <GoogleLogin
+                                            text="continue_with"
+                                            theme="outline"
+                                            shape="circle"
+                                            locale="en"
+                                            auto_select={true}
+                                            onSuccess={handleSuccess}
+                                            onError={(err) => console.log("Login Failed: ",err)}
+                                        />
+                                }
                                 </div>
 
                                 <div className="mt-4 text-center">{Lookup.SIGNIn_AGREEMENT_TEXT}</div>
