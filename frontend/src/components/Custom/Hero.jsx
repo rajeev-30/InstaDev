@@ -51,10 +51,8 @@ const Hero = () => {
             }, { withCredentials: true })
 
             // dispatch(getMessages(res.data.workspace.messages))
-            // console.log("first message: ", message)
             navigate('workspace/' + res.data.workspace._id)
         } catch (error) {
-            console.log("Generate workspace error: ", error)
             toast("Something went wrong! Please try again later.");
             navigate('/')
         }
@@ -97,10 +95,16 @@ const Hero = () => {
                         }
                     </div>
 
-                    {/* ToopTip Text  */}
-                    <div className='pt-3'>
-                        <TooltipText input={input} setInput={setInput} loading={loading} setLoading={setLoading} />
-                    </div>
+                    <div className='flex items-center justify-between gap-2'>
+                        {/* ToopTip Text  */}
+                        <div className='pt-3'>
+                            <TooltipText input={input} setInput={setInput} loading={loading} setLoading={setLoading} />
+                        </div>
+
+                        <div>
+                            Select model
+                        </div>   
+                    </div> 
 
                 </div>
 

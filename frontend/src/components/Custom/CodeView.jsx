@@ -3,7 +3,6 @@ import {
     SandpackProvider,
     SandpackLayout,
     SandpackCodeEditor,
-    SandpackPreview,
     SandpackFileExplorer,
 } from "@codesandbox/sandpack-react";
 import Lookup from '@/data/Lookup';
@@ -12,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { AI_API_END_POINT, USER_API_END_POINT, WORKSPACE_API_END_POINT } from '@/Utils/Constant';
 import { useNavigate, useParams } from 'react-router-dom';
-import Prompt from '@/data/Prompt';
 import { getRefresh as getWorkspaceRefresh } from '@/redux/workspaceSlice';
 import { getRefresh as getUserRefresh } from '@/redux/userSlice';
 import { Loader2Icon } from 'lucide-react';
@@ -34,6 +32,31 @@ const CodeView = () => {
         return inputText.trim().split(/\s+/).filter(word => word).length;
     }
 
+    const parseGeneratedResponse = (responseText) => {
+        if (!responseText) return null;
+
+        if (typeof responseText === 'object') {
+            return responseText;
+        }
+
+        const cleanedText = String(responseText)
+            .replace(/^```json\s*/i, '')
+            .replace(/^```\s*/i, '')
+            .replace(/```\s*$/i, '')
+            .trim();
+
+        try {
+            return JSON.parse(cleanedText);
+        } catch (parseError) {
+            const jsonMatch = cleanedText.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                return JSON.parse(jsonMatch[0]);
+            }
+
+            throw parseError;
+        }
+    }
+
     useEffect(() => {
         if (messages?.length > 0) {
             const role = messages[messages?.length - 1].role;
@@ -41,18 +64,21 @@ const CodeView = () => {
                 GenerateAiCode();
             }
         }
-        console.log(messages)
+        // console.log(messages)
     }, [messages])
 
-    const GenerateAiCode = async (input) => {
+    const GenerateAiCode = async () => {
         try {
             setLoading(true);
             const PROMPT = JSON.stringify(messages);
             const res = await axios.post(`${AI_API_END_POINT}/code`, {
                 prompt: PROMPT,
             }, { withCredentials: true });
-            console.log(res.data.result);
-            const aiRes = res.data.result;
+            const aiRes = parseGeneratedResponse(res.data.result);
+
+            if (!aiRes?.files) {
+                throw new Error('AI response did not include generated files.');
+            }
 
             const mergedFiles = { ...Lookup.DEFAULT_FILE, ...aiRes?.files };
 
@@ -60,7 +86,7 @@ const CodeView = () => {
                 fileData: mergedFiles
             }, { withCredentials: true })
 
-            const tokens = Number(user?.tokens) - Number(countTonken(JSON.stringify(aiRes)))
+            const tokens = Number(user?.tokens) - Number(res.data.tokens);
             await axios.post(`${USER_API_END_POINT}/update/tokens/`, { tokens }, { withCredentials: true })
 
             dispatch(getUserRefresh())

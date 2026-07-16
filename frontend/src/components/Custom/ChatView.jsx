@@ -72,7 +72,7 @@ const ChatView = () => {
                 { withCredentials: true }
             )
 
-            const tokens = Number(user?.tokens) - Number(countTonken(JSON.stringify(aiRes)))
+            const tokens = Number(user?.tokens) - Number(res?.data?.tokens);
             await axios.post(`${USER_API_END_POINT}/update/tokens/`, { tokens }, { withCredentials: true })
 
             dispatch(getUserRefresh())
