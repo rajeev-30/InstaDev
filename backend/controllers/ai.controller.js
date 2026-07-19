@@ -206,7 +206,6 @@ export const getModels = async(req, res) => {
             models
         })
     } catch (error) {
-        console.error("Error retrieving models:", error?.response?.data);
         return res.status(503).json({
             message: error?.response?.data?.message || "Error retrieving models",
             success: false,

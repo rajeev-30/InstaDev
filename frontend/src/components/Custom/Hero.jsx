@@ -127,7 +127,7 @@ const Hero = () => {
                                         onChange={(e) => {
                                             dispatch(setSelectedModel(e.target.value));
                                         }}
-                                        className='appearance-none bg-transparent pr-5 pl-1 text-right text-white outline-none max-w-75'
+                                        className='appearance-none bg-transparent pr-5 pl-1 text-right text-white outline-none w-fit max-w-none cursor-pointer'
                                     >
                                         {allModels.map((model) => (
                                             <option key={model.slug} value={model.slug}>
