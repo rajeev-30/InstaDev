@@ -9,7 +9,6 @@ export const getModels = async () => {
         const res = await axios.get(`${AI_API_END_POINT}/models`, { withCredentials: true });
         return res.data;
     } catch (error) {
-        toast.error("Error fetching models");
         throw error;
     }
 };
