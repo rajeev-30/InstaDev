@@ -9,7 +9,7 @@ import Lookup from '@/data/Lookup';
 import { nightOwl } from "@codesandbox/sandpack-themes";
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { AI_API_END_POINT, USER_API_END_POINT, WORKSPACE_API_END_POINT } from '@/Utils/Constant';
+import { AI_API_END_POINT, DEFAULT_MODEL, USER_API_END_POINT, WORKSPACE_API_END_POINT } from '@/Utils/Constant';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getRefresh as getWorkspaceRefresh } from '@/redux/workspaceSlice';
 import { getRefresh as getUserRefresh } from '@/redux/userSlice';
@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 
 const CodeView = () => {
     const { user } = useSelector(store => store.user)
-    const { messages, fileData } = useSelector(store => store.workspace)
+    const { selectedModel, messages, fileData } = useSelector(store => store.workspace)
     const [activeTab, setActiveTab] = useState('code');
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch()
@@ -64,7 +64,6 @@ const CodeView = () => {
                 GenerateAiCode();
             }
         }
-        // console.log(messages)
     }, [messages])
 
     const GenerateAiCode = async () => {
@@ -73,6 +72,7 @@ const CodeView = () => {
             const PROMPT = JSON.stringify(messages);
             const res = await axios.post(`${AI_API_END_POINT}/code`, {
                 prompt: PROMPT,
+                model: selectedModel || DEFAULT_MODEL,
             }, { withCredentials: true });
             const aiRes = parseGeneratedResponse(res.data.result);
 
@@ -86,16 +86,15 @@ const CodeView = () => {
                 fileData: mergedFiles
             }, { withCredentials: true })
 
-            const tokens = Number(user?.tokens) - Number(res.data.tokens);
-            await axios.post(`${USER_API_END_POINT}/update/tokens/`, { tokens }, { withCredentials: true })
+            const tokens = Number(user?.tokens) - Number(res?.data?.tokens);
+            await axios.post(`${USER_API_END_POINT}/update/tokens`, { tokens }, { withCredentials: true })
 
             dispatch(getUserRefresh())
             dispatch(getWorkspaceRefresh())
 
             setActiveTab('code')
         } catch (error) {
-            console.log("AI Code response error: ", error);
-            toast("Something went wrong! Please try again later.");
+            toast.error( error?.response?.data?.message || "Something went wrong! Please try again later.");
             navigate('/')
 
         }

@@ -8,9 +8,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { RefreshCcw } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSigninDialog } from '@/redux/userSlice'
+import { DEFAULT_MODEL } from '@/Utils/Constant'
 
 const TooltipText = ({ input, setInput, loading, setLoading }) => {
     const { user } = useSelector(store => store.user)
+    const { selectedModel } = useSelector(store => store.workspace)
     const dispatch = useDispatch()
     const enhancePrompt = async () => {
 
@@ -22,13 +24,12 @@ const TooltipText = ({ input, setInput, loading, setLoading }) => {
         try {
             setLoading(true)
             const res = await axios.post(`${AI_API_END_POINT}/enhance`, {
-                prompt: input
+                prompt: input,
+                model: selectedModel || DEFAULT_MODEL,
             }, { withCredentials: true })
             setInput(res.data.result)
-            
         } catch (error) {
-            console.log("Enhance Prompt error: ", error)
-            toast("Something went wrong! Please try again later.");
+            toast.error( error?.response?.data?.message || "Something went wrong! Please try again later.");
         } finally {
             setLoading(false)
         }

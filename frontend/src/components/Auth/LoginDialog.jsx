@@ -37,7 +37,6 @@ const LoginDialog = () => {
             }, { withCredentials: true });
             
             // dispatch(getUser(res.data.user));
-            // console.log(credentialResponse.credential)
             dispatch(getSigninDialog(false));
             dispatch(getUserRefresh())
             dispatch(getWorkspaceRefresh())

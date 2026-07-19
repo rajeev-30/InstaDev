@@ -5,7 +5,7 @@ import { Colors } from '@/data/Colors';
 import { ArrowRight, Loader2Icon } from 'lucide-react';
 import Lookup from '@/data/Lookup';
 import axios from 'axios';
-import { AI_API_END_POINT, USER_API_END_POINT, WORKSPACE_API_END_POINT } from '@/Utils/Constant';
+import { AI_API_END_POINT, DEFAULT_MODEL, USER_API_END_POINT, WORKSPACE_API_END_POINT } from '@/Utils/Constant';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getRefresh as getWorkspaceRefresh } from '@/redux/workspaceSlice';
 import { getRefresh as getUserRefresh } from '@/redux/userSlice';
@@ -16,6 +16,7 @@ import TooltipText from './TooltipText';
 
 const ChatView = () => {
     const { messages } = useSelector(store => store.workspace)
+    const { selectedModel } = useSelector(store => store.workspace)
     const { user } = useSelector(store => store.user)
     const [userInput, setUserInput] = useState("")
     const [loading, setLoading] = useState(false)
@@ -49,7 +50,6 @@ const ChatView = () => {
                 GetAiResponse();
             }
         }
-        // console.log(messages)
     }, [messages])
 
 
@@ -59,9 +59,9 @@ const ChatView = () => {
             const PROMPT = JSON.stringify(messages);
             const res = await axios.post(`${AI_API_END_POINT}/chat`, {
                 prompt: PROMPT,
+                model: selectedModel || DEFAULT_MODEL,
             }, { withCredentials: true })
 
-            // console.log(res.data.result);
             const aiRes = {
                 role: 'model',
                 content: res.data.result
@@ -79,8 +79,7 @@ const ChatView = () => {
             dispatch(getWorkspaceRefresh())
 
         } catch (error) {
-            console.log("AI Chat response error: ", error);
-            toast("Something went wrong! Please try again later.");
+            toast.error( error?.response?.data?.message || "Something went wrong! Please try again later.");
             navigate('/')
         }
         finally {
@@ -106,7 +105,7 @@ const ChatView = () => {
             dispatch(getWorkspaceRefresh())
             setUserInput("")
         } catch (error) {
-            console.log("Update message error: ", error);
+            toast("Something went wrong! Please try again later.");
         }
     }
 

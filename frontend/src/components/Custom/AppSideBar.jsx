@@ -37,7 +37,7 @@ const AppSideBar = () => {
             toast(res.data.message);
             dispatch(getRefresh());
         } catch (error) {
-            console.log("Workspace delete error: ", error);
+            toast("Something went wrong! Please try again later.");
         }
     }
 

@@ -90,6 +90,7 @@ export default config;
       value: 50000,
       desc: "Ideal for hobbyists and casual users for light, exploratory use.",
       price: 4.99,
+      active: true,
     },
     {
       name: "Starter",
@@ -97,6 +98,7 @@ export default config;
       value: 120000,
       desc: "Designed for professionals who need to use InstaDev a few times per week.",
       price: 9.99,
+      active: false,
     },
     {
       name: "Pro",
@@ -104,6 +106,7 @@ export default config;
       value: 2500000,
       desc: "Designed for professionals who need to use InstaDev a few times per week.",
       price: 19.99,
+      active: false,
     },
     {
       name: "10M",
@@ -111,6 +114,7 @@ export default config;
       value: 10000000,
       desc: "Designed for professionals who need to use InstaDev a few times per week.",
       price: 49.99,
+      active: false,
     },
   ],
 };

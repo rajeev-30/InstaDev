@@ -12,9 +12,7 @@ const useGetUserWorkspaces = () => {
         try {
             const res = await axios.get(`${WORKSPACE_API_END_POINT}/all`,{withCredentials: true});
             dispatch(getUserWorkspaces(res?.data?.workspaces));
-            console.log("User workspaces: ",res.data)
         } catch (error) {
-            console.log("useGetUserWorkspaces error: ", error)
             dispatch(getUserWorkspaces(null));
         }
     }

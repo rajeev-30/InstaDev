@@ -1,17 +1,19 @@
 import { Colors } from '@/data/Colors'
 import Lookup from '@/data/Lookup'
-import { ArrowRight, ArrowRightCircle, Loader2Icon, MessageCircle, RefreshCcw, SidebarOpen } from 'lucide-react'
+import { ArrowRight, ArrowRightCircle, ChevronDown, Loader2Icon, MessageCircle, RefreshCcw, SidebarOpen } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 import LoginDialog from '../Auth/LoginDialog'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSigninDialog } from '@/redux/userSlice'
 import axios from 'axios'
-import { AI_API_END_POINT, WORKSPACE_API_END_POINT } from '@/Utils/Constant'
+import { AI_API_END_POINT, DEFAULT_MODEL, WORKSPACE_API_END_POINT } from '@/Utils/Constant'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import AppSideBar from './AppSideBar'
 import TooltipText from './TooltipText'
-import ReactMarkdown from 'react-markdown'
+import { useQuery } from '@tanstack/react-query'
+import { getModels } from '@/lib/api/model'
+import { setSelectedModel } from '@/redux/workspaceSlice'
 
 
 
@@ -19,10 +21,25 @@ const Hero = () => {
     const [input, setInput] = useState("")
     const [loading, setLoading] = useState(false)
     const { user } = useSelector(store => store.user)
+    const { selectedModel } = useSelector(store => store.workspace)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const ref = useRef(null)
 
+    const { data } = useQuery({
+        queryKey: ['models'],
+        queryFn: getModels,
+    });
+
+    const allModels = data?.models || [];
+
+    useEffect(() => {
+        if (!selectedModel && allModels?.length > 0) {
+            dispatch(setSelectedModel(DEFAULT_MODEL));
+        }
+    }, [allModels, dispatch, selectedModel]);
+
+    
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -102,7 +119,25 @@ const Hero = () => {
                         </div>
 
                         <div>
-                            Select model
+                            {
+                                allModels?.length > 0 &&
+                                <div className='relative inline-flex items-center shrink-0'>
+                                    <select
+                                        value={selectedModel}
+                                        onChange={(e) => {
+                                            dispatch(setSelectedModel(e.target.value));
+                                        }}
+                                        className='appearance-none bg-transparent pr-5 pl-1 text-right text-white outline-none max-w-75'
+                                    >
+                                        {allModels.map((model) => (
+                                            <option key={model.slug} value={model.slug}>
+                                                {model.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown className='pointer-events-none absolute right-0 h-4 w-4 text-gray-400' />
+                                </div>
+                            }
                         </div>   
                     </div> 
 
@@ -113,7 +148,7 @@ const Hero = () => {
                         Lookup.SUGGSTIONS.map((item, index) =>
                             <div
                                 onClick={() => onGenerate(item)}
-                                className='border-1 border-gray-800 px-3 py-1 rounded-full text-xs text-gray-400 hover:text-white cursor-pointer hover:bg-gray-600/25' key={index}>
+                                className='border border-gray-800 px-3 py-1 rounded-full text-xs text-gray-400 hover:text-white cursor-pointer hover:bg-gray-600/25' key={index}>
                                 {item}
                             </div>
                         )

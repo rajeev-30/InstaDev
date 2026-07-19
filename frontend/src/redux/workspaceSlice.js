@@ -1,4 +1,3 @@
-import Lookup from "@/data/Lookup"
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
@@ -7,6 +6,7 @@ const initialState = {
     fileData: null,
     userWorkspaces:null,
     deploy:false,
+    selectedModel: null,
     refresh:false
 }
 
@@ -29,6 +29,9 @@ const workspaceSlice = createSlice({
         getUserWorkspaces: (state, action) => {
             state.userWorkspaces = action.payload
         },
+        setSelectedModel: (state, action) => {
+            state.selectedModel = action.payload
+        },
         setDeploy: (state, action) => {
             state.deploy = !state.deploy
         }
@@ -36,7 +39,7 @@ const workspaceSlice = createSlice({
     }
 })
 
-export const {getRefresh, getWorkspace, getMessages, getFileData, getUserWorkspaces, setDeploy} = workspaceSlice.actions
+export const {getRefresh, getWorkspace, getMessages, getFileData, getUserWorkspaces, setSelectedModel, setDeploy} = workspaceSlice.actions
 export default workspaceSlice.reducer
 
 

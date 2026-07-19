@@ -23,6 +23,10 @@ export const isAuthenticated = async(req, res, next) =>{
         next()
 
     } catch (error) {
-        console.log("isAuthentication error: " , error);
+        return res.status(500).json({
+            message:"Authentication failed",
+            success: false,
+            error
+        })
     }
 }

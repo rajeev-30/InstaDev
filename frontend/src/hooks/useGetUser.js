@@ -17,9 +17,7 @@ const useGetUser = () => {
                 withCredentials: true,
             })
             dispatch(getUser(res?.data?.user))
-            console.log("getUser: ",res.data);
         } catch (error) {
-            console.log("useGetuser error: ", error);
             if(error?.response?.data?.isLoginRequired){
                 dispatch(getSigninDialog(true))
                 dispatch(getUser(null))

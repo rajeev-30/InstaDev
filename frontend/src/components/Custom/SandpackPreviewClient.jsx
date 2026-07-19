@@ -13,10 +13,8 @@ const SandpackPreviewClient = () => {
     const GetSandpackClient = async() => {
         const client = previewRef.current?.getClient();
         if(client){
-            // console.log("client: ",client)
             const result  = await client.getCodeSandboxURL();
             // window.open(`https://${result.sandboxId}.csb.app/` , '_blank');
-            // console.log("result: ",result)
         }
     }
 

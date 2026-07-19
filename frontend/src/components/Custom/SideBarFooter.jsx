@@ -34,13 +34,11 @@ const SideBarFooter = () => {
                 withCredentials:true
             })
             toast(res.data.message);
-            // console.log("Logout",res)
             dispatch(getUserRefresh())
             dispatch(getWorkspaceRefresh())
             dispatch(getSigninDialog(true));
             navigate('/')
         } catch (error) {
-            console.log("Logout error: ", error);
             if(error?.response?.data?.isLoginRequired){
                 dispatch(getSigninDialog(true));
                 navigate('/');

@@ -1,6 +1,6 @@
 import { OAuth2Client } from "google-auth-library";
 import jwt from "jsonwebtoken";
-import {User} from "../models/user.model.js";
+import { User } from "../models/user.model.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -17,16 +17,16 @@ export const googleLogin = async (req, res) => {
             audience: process.env.GOOGLE_CLIENT_ID,
         });
 
-        const { email, name, picture} = ticket.getPayload();
+        const { email, name, picture } = ticket.getPayload();
 
         let user = await User.findOne({ email });
 
         if (!user) {
-            user = await User.create({ name, email, picture, tokens});
+            user = await User.create({ name, email, picture, tokens });
         }
 
         const jwtToken = jwt.sign(
-            { id: user._id},
+            { id: user._id },
             process.env.JWT_SECRET,
             { expiresIn: "30d" }
         );
@@ -51,23 +51,23 @@ export const googleLogin = async (req, res) => {
 
 export const Logout = async (req, res) => {
     return res.status(200)
-    .cookie('token','',{
-        expiresIn: new Date(Date.now()),
-        httpOnly:true,
-        secure: true,
-        sameSite: 'None'
-    })
-    .json({
-        message: `You logged out successfully`,
-        success: true,
-    })
+        .cookie('token', '', {
+            expiresIn: new Date(Date.now()),
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None'
+        })
+        .json({
+            message: `You logged out successfully`,
+            success: true,
+        })
 }
 
-export const getUser =  async(req, res) =>{
+export const getUser = async (req, res) => {
     try {
         const userId = req.userId;
         const user = await User.findById(userId);
-        if(!user) {
+        if (!user) {
             return res.status(404).json({
                 message: "User not found",
                 success: false
@@ -75,32 +75,39 @@ export const getUser =  async(req, res) =>{
         }
 
         return res.status(200).json({
-            message:"user found",
-            success:true,
+            message: "user found",
+            success: true,
             user
         })
     } catch (error) {
-        console.log("Get user from token failed: ", error);
+        return res.status(500).json({
+            message: "user retrieval failed",
+            success: false,
+            error
+        })
     }
 }
 
-export const updateTokens =  async(req, res) =>{
+export const updateTokens = async (req, res) => {
     try {
-        const {tokens} = req.body
+        const { tokens } = req.body
         const userId = req.userId;
-        const user  = await User.findById(userId);
-        if(!user) {
+        const user = await User.findById(userId);
+        if (!user) {
             return res.status(404).json({
                 message: "User not found",
                 success: false
             })
         }
-        await User.findByIdAndUpdate(userId, {$set: {tokens}});
-
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: { tokens } },
+            { new: true } 
+        );
         return res.status(200).json({
             message: "Token updated",
             success: true,
-            user
+            user: updatedUser
         })
     } catch (error) {
         return res.status(500).json({
